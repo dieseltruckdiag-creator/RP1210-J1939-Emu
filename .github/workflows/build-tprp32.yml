@@ -1,1 +1,49 @@
 
+name: Build TPRP32 DLL
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'Native/**'
+      - '.github/workflows/build-tprp32.yml'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v4
+
+      - name: Configure MSVC for 32-bit
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
+
+      - name: Compile TPRP32.dll
+        shell: cmd
+        working-directory: Native
+        run: |
+          if not exist build mkdir build
+
+          cl.exe /nologo /LD /EHsc /std:c++17 /W3 /MT /DWIN32 /D_WINDOWS /D_CRT_SECURE_NO_WARNINGS rp1210_emu.cpp ecm_sim.cpp /Fobuild\ /link /MACHINE:X86 /DEF:TPRP32.def /OUT:build\TPRP32.dll
+
+          if errorlevel 1 exit /b 1
+
+      - name: Verify DLL
+        shell: cmd
+        working-directory: Native
+        run: |
+          if not exist build\TPRP32.dll exit /b 1
+          dumpbin /headers build\TPRP32.dll
+          dumpbin /exports build\TPRP32.dll
+
+      - name: Upload compiled DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: TPRP32-x86
+          path: Native/build/TPRP32.dll
+          if-no-files-found: error
+          retention-days: 30
+

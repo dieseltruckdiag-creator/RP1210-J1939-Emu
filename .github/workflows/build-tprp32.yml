@@ -6,6 +6,7 @@ on:
   push:
     paths:
       - 'Native/**'
+      - 'tp.adem.core/**'
       - '.github/workflows/build-tprp32.yml'
 
 jobs:

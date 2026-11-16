@@ -17,5 +17,5 @@ inline uint16_t packStatus(uint8_t cmd,uint8_t mode){return uint16_t((uint16_t(c
 inline uint8_t statusCmd(uint8_t a,uint8_t){return a;}
 inline uint8_t statusMode(uint8_t b){return b;}
 inline std::vector<uint8_t> buildMsg(uint8_t cmd,uint8_t pid,const std::vector<uint8_t>&body){std::vector<uint8_t>v={cmd,pid};v.insert(v.end(),body.begin(),body.end());return v;}
-inline size_t parseHeader(const std::vector<uint8_t>&v,uint8_t&cmd,uint8_t&pid){if(v.size()<2)return 0;cmd=v[0];pid=v[1];return 2;}
+inline size_t parseHeader(const std::vector<uint8_t>&v,uint8_t&cmd,uint16_t&pid){if(v.size()<2)return 0;cmd=v[0];pid=v[1];return 2;}
 }

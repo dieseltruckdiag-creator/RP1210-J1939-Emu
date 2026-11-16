@@ -2,10 +2,16 @@
 name: Build TPRP32 DLL
 
 on:
+  pull_request:
+    paths:
+      - 'Native/**'
+      - 'tp.adem.core/**'
+      - '.github/workflows/build-tprp32.yml'
   workflow_dispatch:
   push:
     paths:
       - 'Native/**'
+      - 'tp.adem.core/**'
       - '.github/workflows/build-tprp32.yml'
 
 jobs:
